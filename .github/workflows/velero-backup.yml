@@ -1,0 +1,75 @@
+name: "01_AMS_AKS_Enterprise_On_Demand_Backup_Azure_Cloud_Provider"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Added to allow manual triggering from GitHub UI
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  AMS_AKS_Enterprise_On_Demand_Backup_Azure_Cloud_Provider:
+    name: "Terraform - Infrastructure Deployment - By HARIKRISHNA PALAKILA"
+    runs-on: ubuntu-latest
+    env:
+      # These allow Terraform to authenticate with Azure automatically
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      # Use a client secret if not using OIDC/Federated credentials
+      # ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }} 
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        run: terraform -chdir="01_AMS_Agent_Management_System_Azure_Kubernetes_Cluster_Backup" init    
+
+      - name: Terraform Plan
+        run: terraform -chdir="01_AMS_Agent_Management_System_Azure_Kubernetes_Cluster_Backup" plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform -chdir="01_AMS_Agent_Management_System_Azure_Kubernetes_Cluster_Backup" apply -auto-approve
+
+      # --- NEW STEPS TO CONNECT TO AKS AND RUN BACKUP ---
+
+      - name: Get AKS Credentials
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: 'RG-AKS-Enterprise-Backup'
+          cluster-name: 'aks-cluster' # REPLACE with your actual AKS name
+
+      - name: Generate Unique Backup and Apply
+        run: |
+          # 1. Create a unique name
+          UNIQUE_NAME="manual-$(date +'%Y%m%d-%H%M')"
+          echo "Creating backup: $UNIQUE_NAME"
+
+          # 2. Inject name into YAML (Ensure aks_velero_backup_yml_files/on-demand-backup.yaml exists in repo)
+          sed -i "s/BACKUP_NAME/$UNIQUE_NAME/g" aks_velero_backup_yml_files/on-demand-backup.yaml
+
+          # 3. Apply to Cluster
+          kubectl apply -f aks_velero_backup_yml_files/on-demand-backup.yaml
+
+          # 4. Verify
+          echo "Verifying backup status..."
+          sleep 5
+          kubectl get backup $UNIQUE_NAME -n velero

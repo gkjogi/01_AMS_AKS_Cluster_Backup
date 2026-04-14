@@ -1,0 +1,11 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: BACKUP_NAME  # Placeholder to be replaced by GitHub Action
+  namespace: velero
+spec:
+  includedNamespaces:
+  - "default"        # Replace with your target namespace
+  ttl: 720h0m0s      # 30 days retention
+  storageLocation: default
+  snapshotVolumes: true

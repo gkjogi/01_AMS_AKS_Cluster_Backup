@@ -1,0 +1,25 @@
+###########  On-Demand AKS Backup - by Harikrishna Palakila ##############
+
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: manual-backup-apr04  # Change this name for every new backup
+  namespace: velero
+spec:
+  includedNamespaces:
+  - "default"                # Replace with your target namespace
+  storageLocation: default
+  ttl: 720h0m0s              # Backup expires in 30 days
+  includedResources:
+  - "*"
+  snapshotVolumes: true      # Set to true if using Azure Disk snapshots
+
+
+#kubectl apply -f on-demand-backup.yaml
+
+## Check the status (should move from InProgress to Completed)
+#velero backup get
+
+# See detailed logs if it fails
+#velero backup logs manual-backup-apr04
+
