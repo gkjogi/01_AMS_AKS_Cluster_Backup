@@ -71,7 +71,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     name       = "system"
     vm_size    = "Standard_B1s"
     node_count = 1
-    orchestrator_version = "1.34" 
+    orchestrator_version = "1.34"
   }
 
   network_profile {
