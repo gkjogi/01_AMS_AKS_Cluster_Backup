@@ -44,7 +44,7 @@ resource "azurerm_resource_group" "main1" {
 resource "azurerm_container_registry" "acr" {
   name                = "acr${random_id.id.hex}"
   resource_group_name = azurerm_resource_group.main1.name
-  location            = azurerm_resource_group.main.location
+  location            = azurerm_resource_group.main1.location
   sku                 = "Standard"
   admin_enabled       = true
 }
@@ -52,7 +52,7 @@ resource "azurerm_container_registry" "acr" {
 # 3. AKS CLUSTER WITH CSI & WORKLOAD IDENTITY
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-cluster"
-  location            = azurerm_resource_group.main.location
+  location            = azurerm_resource_group.main1.location
   resource_group_name = azurerm_resource_group.main1.name
   dns_prefix          = "aksbackup"
 
@@ -177,8 +177,8 @@ provider "kubernetes" {
 # 4. VELERO BACKUP STORAGE
 resource "azurerm_storage_account" "velero" {
   name                     = "velero${random_id.id.hex}"
-  resource_group_name      = azurerm_resource_group.main.name
-  location                 = azurerm_resource_group.main.location
+  resource_group_name      = azurerm_resource_group.main1.name
+  location                 = azurerm_resource_group.main1.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
@@ -191,8 +191,8 @@ resource "azurerm_storage_container" "velero" {
 # 5. VELERO IDENTITY & PERMISSIONS
 resource "azurerm_user_assigned_identity" "velero" {
   name                = "velero-identity"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main1.name
+  location            = azurerm_resource_group.main1.location
 }
 
 resource "azurerm_role_assignment" "velero_storage" {
