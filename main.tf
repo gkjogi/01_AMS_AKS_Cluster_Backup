@@ -105,7 +105,7 @@ resource "helm_release" "velero" {
           provider = "azure"
           bucket   = azurerm_storage_container.velero.name  #"your-container-name" # Update this to your blob container name
           config = {
-            resourceGroup  = azurerm_resource_group.main1name  #"RG-AKS-Enterprise-Backup"
+            resourceGroup  = azurerm_resource_group.main1.name  #"RG-AKS-Enterprise-Backup"
             storageAccount = azurerm_storage_account.velero.name  #"veleroeed1aa6c"
           }
         }]
