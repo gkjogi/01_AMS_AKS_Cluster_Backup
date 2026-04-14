@@ -154,7 +154,7 @@ resource "helm_release" "velero" {
 
 resource "azurerm_federated_identity_credential" "velero" {
   name                = "velero-federated-identity"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = azurerm_resource_group.main1.name
   audience            = ["api://AzureADTokenExchange"]
   issuer              = azurerm_kubernetes_cluster.aks.oidc_issuer_url
   parent_id           = azurerm_user_assigned_identity.velero.id
@@ -205,7 +205,7 @@ resource "azurerm_role_assignment" "velero_storage" {
 }
 
 resource "azurerm_role_assignment" "velero_snapshots" {
-  scope                = azurerm_resource_group.main.id
+  scope                = azurerm_resource_group.main1.id
   role_definition_name = "Disk Snapshot Contributor"
   principal_id         = azurerm_user_assigned_identity.velero.principal_id
   # CRITICAL: This satisfies ABAC conditions that filter on PrincipalType

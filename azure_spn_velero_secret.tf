@@ -33,7 +33,7 @@ AZURE_SUBSCRIPTION_ID=${data.azurerm_client_config.current.subscription_id}
 AZURE_TENANT_ID=${data.azurerm_client_config.current.tenant_id}
 AZURE_CLIENT_ID=${azuread_application.velero.client_id}
 AZURE_CLIENT_SECRET=${azuread_service_principal_password.velero.value}
-AZURE_RESOURCE_GROUP=${azurerm_resource_group.velero-BSL.name}
+AZURE_RESOURCE_GROUP=${azurerm_resource_group.velero-BSL1.name}
 AZURE_CLOUD_NAME=AzurePublicCloud
 EOF
   }
