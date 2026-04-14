@@ -4,8 +4,8 @@ resource "azurerm_resource_group" "velero-BSL1" {
   location = "East US"
 }
 
-resource "azurerm_storage_account" "velero-BSL" {
-  name                     = "velerobslstorageaccount"
+resource "azurerm_storage_account" "velero-BSL1" {
+  name                     = "velerobslstorageaccount1"
   resource_group_name      = azurerm_resource_group.velero-BSL1.name
   location                 = azurerm_resource_group.velero-BSL1.location
   account_tier             = "Standard"

@@ -37,7 +37,7 @@ resource "random_id" "id" {
 # Resource_Group + Container_Registry + AKS + Storage_Account + Storage_Container 
 
 resource "azurerm_resource_group" "main1" {
-  name     = "RG-AKS-Enterprise-Backup"
+  name     = "RG-AKS-Enterprise-Backup1"
   location = "CentralUS"
 }
 
