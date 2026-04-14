@@ -36,14 +36,14 @@ resource "random_id" "id" {
 
 # Resource_Group + Container_Registry + AKS + Storage_Account + Storage_Container 
 
-resource "azurerm_resource_group" "main" {
+resource "azurerm_resource_group" "main1" {
   name     = "RG-AKS-Enterprise-Backup"
   location = "CentralUS"
 }
 
 resource "azurerm_container_registry" "acr" {
   name                = "acr${random_id.id.hex}"
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = azurerm_resource_group.main1.name
   location            = azurerm_resource_group.main.location
   sku                 = "Standard"
   admin_enabled       = true
@@ -53,7 +53,7 @@ resource "azurerm_container_registry" "acr" {
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "aks-cluster"
   location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = azurerm_resource_group.main1.name
   dns_prefix          = "aksbackup"
 
   identity { type = "SystemAssigned" }
