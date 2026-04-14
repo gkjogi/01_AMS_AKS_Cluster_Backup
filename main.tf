@@ -205,14 +205,14 @@ resource "azurerm_role_assignment" "velero_storage" {
   skip_service_principal_aad_check = true
 }
 
-resource "azurerm_role_assignment" "velero_snapshots" {
-  scope                = azurerm_resource_group.main1.id
-  role_definition_name = "Disk Snapshot Contributor"
-  principal_id         = azurerm_user_assigned_identity.velero.principal_id
-  # CRITICAL: This satisfies ABAC conditions that filter on PrincipalType
-  principal_type       = "ServicePrincipal" 
-  # FIX: Prevents 403 errors caused by AAD replication lag
-  skip_service_principal_aad_check = true
+#resource "azurerm_role_assignment" "velero_snapshots" {
+#scope                = azurerm_resource_group.main1.id
+#role_definition_name = "Disk Snapshot Contributor"
+#principal_id         = azurerm_user_assigned_identity.velero.principal_id
+#CRITICAL: This satisfies ABAC conditions that filter on PrincipalType
+#principal_type       = "ServicePrincipal" 
+# FIX: Prevents 403 errors caused by AAD replication lag
+#skip_service_principal_aad_check = true
 }
 
 
