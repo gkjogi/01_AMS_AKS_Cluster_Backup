@@ -40,14 +40,14 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
-        run: terraform -chdir="01_AMS_AKS_Cluster_Backup" init    
+        run: terraform -chdir="../01_AMS_AKS_Cluster_Backup" init    
 
       - name: Terraform Plan
-        run: terraform -chdir="01_AMS_AKS_Cluster_Backup" plan
+        run: terraform -chdir="../01_AMS_AKS_Cluster_Backup" plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform -chdir="01_AMS_AKS_Cluster_Backup" apply -auto-approve
+        run: terraform -chdir="../01_AMS_AKS_Cluster_Backup" apply -auto-approve
 
       # --- NEW STEPS TO CONNECT TO AKS AND RUN BACKUP ---
 
