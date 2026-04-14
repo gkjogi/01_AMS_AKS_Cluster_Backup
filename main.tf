@@ -69,7 +69,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   default_node_pool {
     name       = "system"
-    vm_size    = "Standard_B1s"
+    vm_size    = "Standard_B2s"
     node_count = 1
     orchestrator_version = "1.34"
   }
@@ -213,7 +213,7 @@ resource "azurerm_role_assignment" "velero_storage" {
 #principal_type       = "ServicePrincipal" 
 # FIX: Prevents 403 errors caused by AAD replication lag
 #skip_service_principal_aad_check = true
-}
+#}
 
 
 
