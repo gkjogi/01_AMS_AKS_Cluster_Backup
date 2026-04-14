@@ -14,7 +14,7 @@ resource "azurerm_storage_account" "velero-BSL1" {
 
 resource "azurerm_storage_container" "velero-BSL" {
   name                  = "velero-bsl-backups"
-  storage_account_name  = azurerm_storage_account.velero-BSL.name
+  storage_account_name  = azurerm_storage_account.velero-BSL1.name
   container_access_type = "private"
 }
 
